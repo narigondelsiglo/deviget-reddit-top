@@ -1,0 +1,4 @@
+# things to ignore in lint
+
+*.min.*
+*.md
