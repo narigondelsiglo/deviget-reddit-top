@@ -18,6 +18,9 @@
 .env.test.local
 .env.production.local
 
+# debugging chrome user profile (install extensions)
+.vscode/vscode-chrome-debug-userdatadir
+
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*

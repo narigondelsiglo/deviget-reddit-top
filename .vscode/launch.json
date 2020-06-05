@@ -5,6 +5,7 @@
       "name": "Chrome",
       "type": "chrome",
       "request": "launch",
+      "userDataDir": "${workspaceFolder}/.vscode/vscode-chrome-debug-userdatadir",
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/src",
       "sourceMapPathOverrides": {
