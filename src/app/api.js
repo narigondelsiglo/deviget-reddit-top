@@ -3,11 +3,12 @@ import top from "./top.json";
 
 const parseJsonToPosts = ({ data }) => ({
   id: data.id,
-  author: data.author_fullname || data.author,
+  author: data.author,
   imgUrl: data.thumbnail,
   title: data.title,
   time: data.created_utc,
   comments: data.num_comments,
+  unread: true,
 });
 
 export default top.data?.children?.map(parseJsonToPosts) || [];

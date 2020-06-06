@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
+import clsx from "clsx";
 import Drawer from "@material-ui/core/Drawer";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
@@ -33,17 +34,23 @@ const useStyles = makeStyles((theme) => ({
       flexShrink: 0,
     },
   },
+
   appBar: {
-    [theme.breakpoints.up("sm")]: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
-    },
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  appBarShift: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
   },
   menuButton: {
     marginRight: theme.spacing(2),
-    [theme.breakpoints.up("sm")]: {
-      display: "none",
-    },
   },
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
@@ -58,19 +65,32 @@ const useStyles = makeStyles((theme) => ({
   drawerPaper: {
     width: drawerWidth,
   },
+
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -drawerWidth,
+  },
+  contentShift: {
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
   },
 }));
 
 export default function ResponsiveDrawer() {
   const classes = useStyles();
   const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(true);
 
   const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
+    setOpen(!open);
   };
 
   const drawer = (
@@ -84,7 +104,12 @@ export default function ResponsiveDrawer() {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AppBar position="fixed" className={classes.appBar}>
+      <AppBar
+        position="fixed"
+        className={clsx(classes.appBar, {
+          [classes.appBarShift]: open,
+        })}
+      >
         <Toolbar>
           <IconButton
             color="inherit"
@@ -100,41 +125,22 @@ export default function ResponsiveDrawer() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <nav className={classes.drawer} aria-label="mailbox folders">
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Hidden smUp implementation="css">
-          <Drawer
-            variant="temporary"
-            anchor={theme.direction === "rtl" ? "right" : "left"}
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
-          >
-            {drawer}
-            <BottomNavigation>asdf</BottomNavigation>
-          </Drawer>
-        </Hidden>
-        <Hidden xsDown implementation="css">
-          <Drawer
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            variant="permanent"
-            open
-          >
-            {drawer}
-            <BottomNavigation>
-              <BottomNavigationAction label="Recents" icon={<MailIcon />} />
-            </BottomNavigation>
-          </Drawer>
-        </Hidden>
+      <nav className={classes.drawer} aria-label="Post list">
+        <Drawer
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          variant="persistent"
+          open={open}
+        >
+          {drawer}
+        </Drawer>
       </nav>
-      <main className={classes.content}>
+      <main
+        className={clsx(classes.content, {
+          [classes.contentShift]: open,
+        })}
+      >
         <div className={classes.toolbar} />
         <Typography paragraph>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
