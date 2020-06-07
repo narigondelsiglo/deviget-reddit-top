@@ -62,7 +62,7 @@ export default function PostListItem({ post }) {
             variant="contained"
             size="small"
             startIcon={<DeleteIcon />}
-            onClick={() => dispatch(actions.dismissPost(id))}
+            onClick={(e) => dispatch(actions.dismissPost(id)) && e.stopPropagation()}
           >
             Dismiss post
           </Button>

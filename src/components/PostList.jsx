@@ -1,26 +1,24 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import ListItemText from "@material-ui/core/ListItemText";
-import Checkbox from "@material-ui/core/Checkbox";
-import IconButton from "@material-ui/core/IconButton";
+import LinearProgress from "@material-ui/core/LinearProgress";
+import { actions } from "app/postsSlice";
 import PostListItem from "./PostListItem";
 
-// import posts from "../app/api";
-
 export default function PostList() {
-  const list = useSelector((state) => state.posts.list);
-
-  return (
-    <List>
-      {list.map((post) => {
+  const postsList = useSelector((state) => state.posts.entities);
+  const loading = useSelector((state) => state.posts.loading);
+  const dispatch = useDispatch();
+  if (!loading && Object.values(postsList).length === 0) {
+    dispatch(actions.fetchTop50());
+  }
+  return loading ? (
+    <LinearProgress />
+  ) : (
+    <>
+      {Object.values(postsList).map((post) => {
         return <PostListItem key={post.id} post={post} />;
       })}
-    </List>
+    </>
   );
 }

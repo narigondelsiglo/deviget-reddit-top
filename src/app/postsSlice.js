@@ -5,35 +5,60 @@
 // immutable state based off those changes
 
 import { createSlice, createAsyncThunk, createEntityAdapter } from "@reduxjs/toolkit";
-import fetchTop50RedditPosts from "app/api";
+import * as api from "./api";
 
 const postsAdapter = createEntityAdapter();
 
-export const fetchTop50 = createAsyncThunk("posts/fetchTop50", async () => {
-  const response = await fetchTop50RedditPosts();
-  return response.data;
-});
+export const fetchTop50 = createAsyncThunk(
+  "posts/fetchTop50",
+  async () => {
+    console.log("dispatched fetchTop50 action");
+    const response = await api.fetchTop50();
+    return response;
+  },
+  {
+    condition: (foo, thunkApi) => {
+      const { getState, requestId } = thunkApi;
+      const { currentRequestId, loading } = getState().posts;
+      return !(loading && requestId === currentRequestId);
+    },
+  }
+);
 
 export const slice = createSlice({
   name: "users",
   initialState: {
-    selectPost: null,
-    ...postsAdapter.getInitialState({ loading: false, activeRequestId: null }),
+    selectedPost: null,
+    ...postsAdapter.getInitialState({ loading: false, currentRequestId: null }),
   },
   reducers: {
     selectPost: (state, action) => {
-      state.selectedPost = state.entities.find((p) => p.id === action.payload);
+      const post = state.entities[action.payload];
+      post.unread = false;
+      state.selectedPost = post;
     },
-    dismissPost: postsAdapter.removeOne,
+    dismissPost: (state, key) => {
+      console.log(state, key);
+      postsAdapter.removeOne(state, key);
+    },
     dismissAllPosts: postsAdapter.removeAll,
   },
-  extraReducers: (builder) => {
-    builder.addCase(fetchTop50.fulfilled, (state, action) => {
-      postsAdapter.upsertMany(state, action.payload);
-    });
+  extraReducers: {
+    [fetchTop50.fulfilled]: (state, action) => {
+      console.log("fetch fullfilled", action.payload);
+      if (Array.isArray(action.payload)) postsAdapter.upsertMany(state, action.payload);
+      state.loading = false;
+      state.currentRequestId = null;
+    },
+    [fetchTop50.pending]: (state, action) => {
+      if (!state.loading) {
+        state.loading = true;
+        state.currentRequestId = action.meta.requestId;
+      }
+    },
   },
 });
-export const { actions } = slice;
+export const actions = { ...slice.actions, fetchTop50 };
 
 const { reducer } = slice;
 export default reducer;
