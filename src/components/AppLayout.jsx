@@ -21,6 +21,7 @@ import Box from "@material-ui/core/Box";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+
 import PropTypes from "prop-types";
 
 import { Button } from "@material-ui/core";
@@ -28,6 +29,7 @@ import { Button } from "@material-ui/core";
 import { actions } from "../app/postsSlice";
 
 import PostList from "./PostList";
+import PostPanelItem from "./PostPanelItem";
 
 const drawerWidth = 400;
 
@@ -69,6 +71,7 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: drawerWidth,
+    cursor: "pointer",
   },
 
   content: {
@@ -92,6 +95,8 @@ const useStyles = makeStyles((theme) => ({
 export default function ResponsiveDrawer() {
   const classes = useStyles();
   const theme = useTheme();
+  const loading = useSelector((state) => state.posts.loading);
+  const selectedPost = useSelector((state) => state.posts.selectedPost);
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(true);
 
@@ -150,16 +155,18 @@ export default function ResponsiveDrawer() {
         })}
       >
         <div className={classes.toolbar} />
-        <Typography paragraph>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-          magna aliqua. Rhoncus dolor purus non enim praesent elementum facilisis leo vel. Risus at ultrices mi tempus
-          imperdiet. Semper risus in hendrerit gravida rutrum quisque non tellus. Convallis convallis tellus id interdum
-          velit laoreet id donec ultrices. Odio morbi quis commodo odio aenean sed adipiscing. Amet nisl suscipit
-          adipiscing bibendum est ultricies integer quis. Cursus euismod quis viverra nibh cras. Metus vulputate eu
-          scelerisque felis imperdiet proin fermentum leo. Mauris commodo quis imperdiet massa tincidunt. Cras tincidunt
-          lobortis feugiat vivamus at augue. At augue eget arcu dictum varius duis at consectetur lorem. Velit sed
-          ullamcorper morbi tincidunt. Lorem donec massa sapien faucibus et molestie ac.
-        </Typography>
+        {selectedPost ? (
+          <PostPanelItem post={selectedPost} />
+        ) : (
+          <>
+            <Typography paragraph>Hello! This is an application that fetches the top 50 posts from Reddit</Typography>
+            <Typography paragraph>
+              {loading
+                ? "The posts are loading, please wait..."
+                : "Select a post from the left panel to expand the contents"}
+            </Typography>
+          </>
+        )}
       </main>
     </div>
   );

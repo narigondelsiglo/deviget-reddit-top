@@ -2,21 +2,13 @@ import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
-import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import ListItemText from "@material-ui/core/ListItemText";
 import Divider from "@material-ui/core/Divider";
-import Badge from "@material-ui/core/Badge";
-
-import { IconButton, Button } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
-import CommentIcon from "@material-ui/icons/Comment";
 import MailOutlinedIcon from "@material-ui/icons/MailOutlined";
 import DraftsOutlinedIcon from "@material-ui/icons/DraftsOutlined";
 
