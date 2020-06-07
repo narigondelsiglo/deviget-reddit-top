@@ -1,4 +1,6 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Drawer from "@material-ui/core/Drawer";
@@ -14,11 +16,16 @@ import BottomNavigation from "@material-ui/core/BottomNavigation";
 import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 
 import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+import DeleteIcon from "@material-ui/icons/Delete";
+import Box from "@material-ui/core/Box";
 import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import PropTypes from "prop-types";
+
+import { Button } from "@material-ui/core";
+
+import { actions } from "../app/postsSlice";
 
 import PostList from "./PostList";
 
@@ -55,12 +62,10 @@ const useStyles = makeStyles((theme) => ({
   // necessary for content to be below app bar
   toolbar: theme.mixins.toolbar,
   bottomBar: {
-    position: "fixed",
-    top: "auto",
+    position: "sticky",
     bottom: 0,
-    backgroundColor: "#ff6",
-    width: drawerWidth,
-    zIndex: 2,
+    height: 35,
+    width: "100%",
   },
   drawerPaper: {
     width: drawerWidth,
@@ -87,6 +92,7 @@ const useStyles = makeStyles((theme) => ({
 export default function ResponsiveDrawer() {
   const classes = useStyles();
   const theme = useTheme();
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(true);
 
   const handleDrawerToggle = () => {
@@ -94,12 +100,14 @@ export default function ResponsiveDrawer() {
   };
 
   const drawer = (
-    <div>
-      <PostList />
-      <BottomNavigation className={classes.bottomBar}>
-        <BottomNavigationAction label="Recents" icon={<MailIcon />} />
-      </BottomNavigation>
-    </div>
+    <Box display="flex" flexDirection="column">
+      <PostList flexGrow={1} />
+      <Box className={classes.bottomBar} textAlign="center" bgcolor="grey.200">
+        <Button variant="text" startIcon={<DeleteIcon />} onClick={() => dispatch(actions.dismissAllPosts())}>
+          Dismiss All
+        </Button>
+      </Box>
+    </Box>
   );
   return (
     <div className={classes.root}>

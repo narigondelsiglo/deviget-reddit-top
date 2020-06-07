@@ -13,8 +13,8 @@ const parseJsonToPosts = ({ data }) => ({
 
 export default top.data?.children?.map(parseJsonToPosts) || [];
 
-// export default async () => {
-//   const response = await fetch("https://www.reddit.com/top.json?limit=50");
-//   const json = await response.json();
-//   return json.data?.children?.map(parseJsonToPosts);
-// };
+export async function fetchTop50() {
+  const response = await fetch("https://www.reddit.com/top.json?limit=50");
+  const json = await response.json();
+  return json.data?.children?.map(parseJsonToPosts);
+}

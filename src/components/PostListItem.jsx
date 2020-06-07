@@ -1,4 +1,6 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -19,6 +21,7 @@ import MailOutlinedIcon from "@material-ui/icons/MailOutlined";
 import DraftsOutlinedIcon from "@material-ui/icons/DraftsOutlined";
 
 import moment from "moment";
+import { actions } from "../app/postsSlice";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,19 +31,17 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: 14,
   },
-  button: {
-    margin: theme.spacing(1),
-  },
 }));
 
 export default function PostListItem({ post }) {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   const { id, author, title, imgUrl, time, comments, unread } = post;
 
   return (
     <>
-      <Card className={classes.root}>
+      <Card className={classes.root} onClick={() => dispatch(actions.selectPost(id))}>
         <CardContent className={classes.root}>
           <Box display="flex">
             <Box p={1}>{unread ? <MailOutlinedIcon /> : <DraftsOutlinedIcon />}</Box>
@@ -57,11 +58,16 @@ export default function PostListItem({ post }) {
           </Box>
         </CardContent>
         <CardActions display="flex">
-          <Button variant="contained" size="small" startIcon={<DeleteIcon />}>
-            Discard post
+          <Button
+            variant="contained"
+            size="small"
+            startIcon={<DeleteIcon />}
+            onClick={() => dispatch(actions.dismissPost(id))}
+          >
+            Dismiss post
           </Button>
           <Box p={1} flexGrow={1} textAlign="right">
-            {post.comments} comments
+            {comments} comments
           </Box>
         </CardActions>
       </Card>
