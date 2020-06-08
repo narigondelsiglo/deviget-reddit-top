@@ -26,7 +26,7 @@ import PropTypes from "prop-types";
 
 import { Button } from "@material-ui/core";
 
-import { actions } from "../app/postsSlice";
+import { actions, selectors } from "../app/postsSlice";
 
 import PostList from "./PostList";
 import PostPanelItem from "./PostPanelItem";
@@ -92,13 +92,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ResponsiveDrawer() {
+export default function AppLayout() {
   const classes = useStyles();
   const theme = useTheme();
   const loading = useSelector((state) => state.posts.loading);
   const selectedPost = useSelector((state) => state.posts.selectedPost);
+  const postsCount = useSelector(selectors.selectTotal);
   const dispatch = useDispatch();
+
   const [open, setOpen] = React.useState(true);
+
+  if (!loading && postsCount === 0) {
+    dispatch(actions.fetchTop50());
+  }
 
   const handleDrawerToggle = () => {
     setOpen(!open);

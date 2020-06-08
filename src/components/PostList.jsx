@@ -8,10 +8,6 @@ import PostListItem from "./PostListItem";
 export default function PostList() {
   const postsList = useSelector((state) => state.posts.entities);
   const loading = useSelector((state) => state.posts.loading);
-  const dispatch = useDispatch();
-  if (!loading && Object.values(postsList).length === 0) {
-    dispatch(actions.fetchTop50());
-  }
   return loading ? (
     <LinearProgress />
   ) : (
