@@ -111,8 +111,9 @@ export default function AppLayout() {
   };
 
   const drawer = (
-    <Box display="flex" flexDirection="column">
-      <PostList flexGrow={1} />
+    <Box display="flex" height="100%" flexDirection="column">
+      <PostList flex="none" />
+      <Box flexGrow={1} />
       <Box className={classes.bottomBar} textAlign="center" bgcolor="grey.200">
         <Button variant="text" startIcon={<DeleteIcon />} onClick={() => dispatch(actions.dismissAllPosts())}>
           Dismiss All
