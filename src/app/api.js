@@ -4,7 +4,8 @@ import top from "./top.json";
 const parseJsonToPosts = ({ data }) => ({
   id: data.id,
   author: data.author,
-  imgUrl: data.thumbnail,
+  thumbnail: data.thumbnail !== "default" ? data.thumbnail : null,
+  image: data.preview?.images[0]?.source?.url?.replace(/&amp;/g, "&"),
   title: data.title,
   time: data.created_utc,
   comments: data.num_comments,

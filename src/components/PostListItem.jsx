@@ -29,7 +29,7 @@ export default function PostListItem({ post }) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const { id, author, title, imgUrl, time, comments, unread } = post;
+  const { id, author, title, thumbnail, time, comments, unread } = post;
 
   return (
     <>
@@ -43,7 +43,7 @@ export default function PostListItem({ post }) {
             <Box p={1}>{moment.unix(time).fromNow()}</Box>
           </Box>
           <Box display="flex">
-            <Box bgcolor="grey.300">{imgUrl && <img src={imgUrl} alt={title} />}</Box>
+            <Box>{thumbnail && <img src={thumbnail} alt="No image" />}</Box>
             <Box p={1} flexGrow={1} textAlign="left">
               {title}
             </Box>
