@@ -1,21 +1,18 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-
+import { useDispatch } from "react-redux";
+import saveAs from "file-saver";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/CardActions";
 import Box from "@material-ui/core/Box";
-import Divider from "@material-ui/core/Divider";
 import Button from "@material-ui/core/Button";
-import DeleteIcon from "@material-ui/icons/Delete";
-import MailOutlinedIcon from "@material-ui/icons/MailOutlined";
-import DraftsOutlinedIcon from "@material-ui/icons/DraftsOutlined";
+import SaveIcon from "@material-ui/icons/Save";
 
 import moment from "moment";
 import { actions } from "../app/postsSlice";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     minWidth: 275,
     padding: 2,
@@ -23,13 +20,21 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontSize: 14,
   },
+  image: {
+    maxWidth: 400,
+  },
 }));
 
 export default function PostListItem({ post }) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const { id, author, title, imgUrl, time, comments, unread } = post;
+  const { id, author, title, time, comments, thumbnail, image } = post;
+
+  const handleDownloadImage = async () => {
+    // Use external proxy to avoid CORS security restriction
+    return saveAs(`https://cors-anywhere.herokuapp.com/${image}`, `${id}.jpeg`);
+  };
 
   return (
     <Card className={classes.root} onClick={() => dispatch(actions.selectPost(id))}>
@@ -40,14 +45,18 @@ export default function PostListItem({ post }) {
           </Box>
           <Box p={1}>{moment.unix(time).fromNow()}</Box>
         </Box>
-        <Box display="flex">
-          <Box bgcolor="grey.300">{imgUrl && <img src={imgUrl} alt={title} />}</Box>
-          <Box p={1} flexGrow={1} textAlign="left">
-            {title}
-          </Box>
+
+        <Box>{(image || thumbnail) && <img className={classes.image} src={image || thumbnail} alt={title} />}</Box>
+        <Box p={1} textAlign="left">
+          {title}
         </Box>
       </CardContent>
       <CardActions display="flex">
+        {image && (
+          <Button variant="contained" size="small" startIcon={<SaveIcon />} onClick={handleDownloadImage}>
+            Download full resolution image
+          </Button>
+        )}
         <Box p={1} flexGrow={1} textAlign="right">
           {comments} comments
         </Box>
