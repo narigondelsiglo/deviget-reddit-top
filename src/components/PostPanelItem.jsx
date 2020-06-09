@@ -33,7 +33,10 @@ export default function PostListItem({ post }) {
 
   const handleDownloadImage = async () => {
     // Use external proxy to avoid CORS security restriction
-    return saveAs(`https://cors-anywhere.herokuapp.com/${image}`, `${id}.jpeg`);
+    return saveAs(
+      `https://cors-anywhere.herokuapp.com/${image}`,
+      `${id}.${image.split(/[#?]/)[0].split(".").pop().trim()}`
+    );
   };
 
   return (
