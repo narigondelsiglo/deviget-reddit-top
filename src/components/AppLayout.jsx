@@ -1,28 +1,21 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Drawer from "@material-ui/core/Drawer";
+
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import List from "@material-ui/core/List";
-import Typography from "@material-ui/core/Typography";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import BottomNavigation from "@material-ui/core/BottomNavigation";
-import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
 
-import InboxIcon from "@material-ui/icons/MoveToInbox";
+import Typography from "@material-ui/core/Typography";
+
 import DeleteIcon from "@material-ui/icons/Delete";
 import Box from "@material-ui/core/Box";
-import Hidden from "@material-ui/core/Hidden";
+
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-
-import PropTypes from "prop-types";
 
 import { Button } from "@material-ui/core";
 
@@ -37,13 +30,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
   },
-  drawer: {
-    [theme.breakpoints.up("sm")]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-  },
-
   appBar: {
     transition: theme.transitions.create(["margin", "width"], {
       easing: theme.transitions.easing.sharp,
@@ -61,19 +47,21 @@ const useStyles = makeStyles((theme) => ({
   menuButton: {
     marginRight: theme.spacing(2),
   },
-  // necessary for content to be below app bar
-  toolbar: theme.mixins.toolbar,
-  bottomBar: {
-    position: "sticky",
-    bottom: 0,
-    height: 35,
-    width: "100%",
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
   },
   drawerPaper: {
     width: drawerWidth,
-    cursor: "pointer",
   },
-
+  drawerHeader: {
+    display: "flex",
+    alignItems: "center",
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: "flex-end",
+  },
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),
@@ -90,13 +78,19 @@ const useStyles = makeStyles((theme) => ({
     }),
     marginLeft: 0,
   },
+  bottomBar: {
+    position: "sticky",
+    bottom: 0,
+    height: 35,
+    width: "100%",
+  },
 }));
 
 export default function AppLayout() {
   const classes = useStyles();
-  const theme = useTheme();
   const loading = useSelector((state) => state.posts.loading);
   const selectedPost = useSelector((state) => state.posts.selectedPost);
+  const postsList = useSelector(selectors.selectEntities);
   const postsCount = useSelector(selectors.selectTotal);
   const dispatch = useDispatch();
 
@@ -112,7 +106,7 @@ export default function AppLayout() {
 
   const drawer = (
     <Box display="flex" height="100%" flexDirection="column">
-      <PostList flex="none" />
+      <PostList loading={loading} postsList={postsList} flex="none" />
       <Box flexGrow={1} />
       <Box className={classes.bottomBar} textAlign="center" bgcolor="grey.200">
         <Button variant="text" startIcon={<DeleteIcon />} onClick={() => dispatch(actions.dismissAllPosts())}>
@@ -145,23 +139,23 @@ export default function AppLayout() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <nav className={classes.drawer} aria-label="Post list">
-        <Drawer
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-          variant="persistent"
-          open={open}
-        >
-          {drawer}
-        </Drawer>
-      </nav>
+      <Drawer
+        className={classes.drawer}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+        anchor="left"
+        variant="persistent"
+        open={open}
+      >
+        {drawer}
+      </Drawer>
       <main
         className={clsx(classes.content, {
           [classes.contentShift]: open,
         })}
       >
-        <div className={classes.toolbar} />
+        <div className={classes.drawerHeader} />
         {selectedPost ? (
           <PostPanelItem post={selectedPost} />
         ) : (

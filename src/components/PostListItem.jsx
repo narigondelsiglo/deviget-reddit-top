@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
@@ -15,7 +15,7 @@ import DraftsOutlinedIcon from "@material-ui/icons/DraftsOutlined";
 import moment from "moment";
 import { actions } from "../app/postsSlice";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {
     minWidth: 275,
     padding: 2,
@@ -43,7 +43,7 @@ export default function PostListItem({ post }) {
             <Box p={1}>{moment.unix(time).fromNow()}</Box>
           </Box>
           <Box display="flex">
-            <Box>{thumbnail && <img src={thumbnail} alt="No image" />}</Box>
+            <Box>{thumbnail && <img src={thumbnail} alt="" />}</Box>
             <Box p={1} flexGrow={1} textAlign="left">
               {title}
             </Box>

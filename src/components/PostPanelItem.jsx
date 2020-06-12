@@ -56,7 +56,7 @@ export default function PostListItem({ post }) {
       </CardContent>
       <CardActions display="flex">
         {image && (
-          <Button variant="contained" size="small" startIcon={<SaveIcon />} onClick={handleDownloadImage}>
+          <Button variant="contained" size="small" flex="none" startIcon={<SaveIcon />} onClick={handleDownloadImage}>
             Download full resolution image
           </Button>
         )}
