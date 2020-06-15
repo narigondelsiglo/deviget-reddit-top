@@ -10,9 +10,7 @@ export default function PostList({ loading, postsList }) {
   switch (true) {
     case loading:
       return <LinearProgress />;
-    case Object.values(postsList).length === 0:
-      return <Box>No posts loaded</Box>;
-    default:
+    case postsList && Object.values(postsList).length > 0:
       return (
         <TransitionGroup>
           {Object.values(postsList).map((post) => {
@@ -26,5 +24,7 @@ export default function PostList({ loading, postsList }) {
           })}
         </TransitionGroup>
       );
+    default:
+      return <Box>No posts loaded</Box>;
   }
 }

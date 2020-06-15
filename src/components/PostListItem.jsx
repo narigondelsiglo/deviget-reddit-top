@@ -19,6 +19,7 @@ const useStyles = makeStyles(() => ({
   root: {
     minWidth: 275,
     padding: 2,
+    cursor: "pointer",
   },
   title: {
     fontSize: 14,
@@ -33,7 +34,11 @@ export default function PostListItem({ post }) {
 
   return (
     <>
-      <Card className={classes.root} onClick={() => dispatch(actions.selectPost(id))}>
+      <Card
+        data-testid={`PostListItem-${id}`}
+        className={classes.root}
+        onClick={() => dispatch(actions.selectPost(id))}
+      >
         <CardContent className={classes.root}>
           <Box display="flex">
             <Box p={1}>{unread ? <MailOutlinedIcon /> : <DraftsOutlinedIcon />}</Box>

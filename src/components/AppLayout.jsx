@@ -1,24 +1,17 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-
 import { makeStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
 import Drawer from "@material-ui/core/Drawer";
-
 import CssBaseline from "@material-ui/core/CssBaseline";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-
 import Typography from "@material-ui/core/Typography";
-
 import DeleteIcon from "@material-ui/icons/Delete";
 import Box from "@material-ui/core/Box";
-
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
-
 import { Button } from "@material-ui/core";
-
 import { actions, selectors } from "../app/postsSlice";
 
 import PostList from "./PostList";
@@ -154,6 +147,7 @@ export default function AppLayout() {
         className={clsx(classes.content, {
           [classes.contentShift]: open,
         })}
+        data-testid="PostPanelItem"
       >
         <div className={classes.drawerHeader} />
         {selectedPost ? (
