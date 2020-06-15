@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/deviget-reddit-top/precache-manifest.cbdb8f812307cd7025f995dc043e1c22.js"
+  "/deviget-reddit-top/precache-manifest.d3a99110f1547881faf432a73c392cb9.js"
 );
 
 self.addEventListener('message', (event) => {
